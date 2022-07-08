@@ -350,10 +350,10 @@ function processArgs(args, options) {
 
 function _runServer(argv) {
   const app = express();
-  const httpServer = argv.https ?
-    https.createServer({ key: argv.httpsPrivateKey, cert: argv.httpsCert }, app) :
-    http.createServer(app);
-  const blocks = {};
+  // const httpServer = argv.https ?
+  //   https.createServer({ key: argv.httpsPrivateKey, cert: argv.httpsCert }, app) :
+  //   http.createServer(app);
+  // const blocks = {};
 
   console.log(dedent(chalk`
     Listener Port:
@@ -389,7 +389,6 @@ function _runServer(argv) {
     Trust ACS URL in Request:
       {cyan ${!argv.disableRequestAcsUrl}}
   `));
-
 
   /**
    * IdP Configuration
@@ -791,32 +790,33 @@ function _runServer(argv) {
 
   console.log(chalk`Starting IdP server on port {cyan ${app.get('host')}:${app.get('port')}}...\n`);
 
-  httpServer.listen(app.get('port'), app.get('host'), function() {
-    const scheme          = argv.https ? 'https' : 'http',
-          {address, port} = httpServer.address(),
-          hostname        = WILDCARD_ADDRESSES.includes(address) ? os.hostname() : 'localhost',
-          baseUrl         = `${scheme}://${hostname}:${port}`;
+  // httpServer.listen(app.get('port'), app.get('host'), function() {
+  //   const scheme          = argv.https ? 'https' : 'http',
+  //         {address, port} = httpServer.address(),
+  //         hostname        = WILDCARD_ADDRESSES.includes(address) ? os.hostname() : 'localhost',
+  //         baseUrl         = `${scheme}://${hostname}:${port}`;
 
-    console.log(dedent(chalk`
-      IdP Metadata URL:
-        {cyan ${baseUrl}${IDP_PATHS.METADATA}}
+  //   console.log(dedent(chalk`
+  //     IdP Metadata URL:
+  //       {cyan ${baseUrl}${IDP_PATHS.METADATA}}
 
-      SSO Bindings:
-        urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST
-          => {cyan ${baseUrl}${IDP_PATHS.SSO}}
-        urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect
-          => {cyan ${baseUrl}${IDP_PATHS.SSO}}
-      ${argv.sloUrl ? `
-      SLO Bindings:
-        urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST
-          => {cyan ${baseUrl}${IDP_PATHS.SLO}}
-        urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect
-          => {cyan ${baseUrl}${IDP_PATHS.SLO}}
-      ` : ''}
-      IdP server ready at
-        {cyan ${baseUrl}}
-    `));
-  });
+  //     SSO Bindings:
+  //       urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST
+  //         => {cyan ${baseUrl}${IDP_PATHS.SSO}}
+  //       urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect
+  //         => {cyan ${baseUrl}${IDP_PATHS.SSO}}
+  //     ${argv.sloUrl ? `
+  //     SLO Bindings:
+  //       urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST
+  //         => {cyan ${baseUrl}${IDP_PATHS.SLO}}
+  //       urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect
+  //         => {cyan ${baseUrl}${IDP_PATHS.SLO}}
+  //     ` : ''}
+  //     IdP server ready at
+  //       {cyan ${baseUrl}}
+  //   `));
+  // });
+  return app
 }
 
 function runServer(options) {
